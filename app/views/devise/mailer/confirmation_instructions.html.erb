@@ -1,0 +1,25 @@
+<%= stylesheet_link_tag 'styles.css', media: 'all' %>
+
+<div class="container">
+    <div class='main-container'>
+        <div class='content'>
+            <div class='header'>
+                <%= image_tag attachments['logo.png'].url, alt: 'TrueMark', class: 'logo' %>
+            </div>
+            <hr class='seperator'>        
+            <div class='mail-body'>
+                <p><b> <%= I18n.t('confirmation_email.body.welcome') + " " + @email %>!</b></p>
+                <p><%= I18n.t('confirmation_email.body.message') %></p>
+                <p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+            </div>
+            <hr class='seperator'> 
+            <div class="footer">
+                <p><%= I18n.t('confirmation_email.footer.location') %></p>
+                <p><%= I18n.t('confirmation_email.footer.phone') %></p>
+                <p><%= I18n.t('confirmation_email.footer.copyright') %></p>
+            </div>
+        </div>
+        <div class='line'>
+        </div>
+    </div>
+</div>

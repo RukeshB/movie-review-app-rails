@@ -1,0 +1,389 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/v1/movies":
+    get:
+      summary: get all movies
+      tags:
+      - Movies
+      parameters:
+      - name: search_query
+        in: query
+        description: name of a movie
+        schema:
+          type: string
+      - name: sort_by_release_date
+        in: query
+        enum:
+        - asc
+        - desc
+        description: sort by relese date
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+              - id: 1
+                name: movie1
+                genre:
+                - action
+                - comedy
+                language: english
+                description: test movie 1
+                release_date: '2016-08-20'
+                director:
+                - director1
+                producer:
+                - producer1
+                - producer2
+                writer:
+                - writer1
+                actor:
+                - actor1
+                - actor2
+                - actor3
+                length_in_minutes: 138
+                aggregate_review: 7.0
+                cover_image_url: 
+                movie_user_reviews:
+                - id: 1
+                  user_id: 1
+                  movie_id: 1
+                  review: test 2
+                  rating: 7.0
+              - id: 2
+                name: movie2
+                genre:
+                - action
+                - comedy
+                language: english
+                description: test movie 1
+                release_date: '2020-08-20'
+                director:
+                - director1
+                producer:
+                - producer1
+                - producer2
+                writer:
+                - writer1
+                actor:
+                - actor1
+                - actor2
+                aggregate_review: "-"
+                cover_image_url: 
+                movie_user_reviews: []
+    post:
+      summary: Create a new movie
+      tags:
+      - Movies
+      parameters: []
+      responses:
+        '201':
+          description: movie created
+          content:
+            application/json:
+              example:
+                id: 2
+                name: movie2
+                genre:
+                - action
+                - comedy
+                language: english
+                description: test movie 1
+                release_date: '2020-08-20'
+                director:
+                - director1
+                producer:
+                - producer1
+                - producer2
+                writer:
+                - writer1
+                actor:
+                - actor1
+                - actor2
+                aggregate_review: "-"
+                cover_image_url: 
+                movie_user_reviews: []
+        '422':
+          description: Invalid request
+        '500':
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                genre:
+                  type: array
+                  items:
+                    type: string
+                language:
+                  type: string
+                description:
+                  type: string
+                release_date:
+                  type: string
+                  format: date
+                director:
+                  type: array
+                  items:
+                    type: string
+                producer:
+                  type: array
+                  items:
+                    type: string
+                writer:
+                  type: array
+                  items:
+                    type: string
+                actor:
+                  type: array
+                  items:
+                    type: string
+                length_in_minutes:
+                  type: integer
+              required:
+              - name
+              - genre
+              - language
+              - description
+              - release_date
+              - director
+              - producer
+              - writer
+              - actor
+              - length_in_minutes
+  "/api/v1/movies/{id}":
+    get:
+      summary: get movies by id
+      tags:
+      - Movies
+      parameters:
+      - name: id
+        in: path
+        description: uniq id of a movie
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+              - id: 1
+                name: movie1
+                genre:
+                - action
+                - comedy
+                language: english
+                description: test movie 1
+                release_date: '2016-08-20'
+                director:
+                - director1
+                producer:
+                - producer1
+                - producer2
+                writer:
+                - writer1
+                actor:
+                - actor1
+                - actor2
+                - actor3
+                length_in_minutes: 138
+                aggregate_review: 7.0
+                cover_image_url: 
+                movie_user_reviews:
+                - id: 1
+                  user_id: 1
+                  movie_id: 1
+                  review: test 2
+                  rating: 7.0
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+    patch:
+      summary: Update a movie
+      tags:
+      - Movies
+      parameters:
+      - name: id
+        in: path
+        description: uniq id of a movie
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: OK
+        '422':
+          description: Invalid request
+        '500':
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                genre:
+                  type: array
+                  items:
+                    type: string
+                language:
+                  type: string
+                description:
+                  type: string
+                release_date:
+                  type: string
+                  format: date
+                director:
+                  type: array
+                  items:
+                    type: string
+                producer:
+                  type: array
+                  items:
+                    type: string
+                writer:
+                  type: array
+                  items:
+                    type: string
+                actor:
+                  type: array
+                  items:
+                    type: string
+                length_in_minutes:
+                  type: integer
+    delete:
+      summary: delete a movie
+      tags:
+      - Movies
+      parameters:
+      - name: id
+        in: path
+        description: uniq id of a movie
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: OK
+        '500':
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+  "/api/v1/movies/{movie_id}/user_reviews":
+    post:
+      summary: create new review
+      tags:
+      - User Reviews
+      parameters:
+      - name: movie_id
+        in: path
+        description: uniqe id of a movie
+        required: true
+        schema:
+          type: integer
+      responses:
+        '201':
+          description: user review created
+          content:
+            application/json:
+              example:
+                id: 1
+                user_id: 1
+                movie_id: 1
+                review: test 2
+                rating: '5.0'
+                movie:
+                  id: 1
+                  name: movie125
+                  genre:
+                  - action
+                  - abc
+                  language: english
+                  description: test
+                  release_date: '2020-01-01'
+                  length_in_minutes: 138
+                  director:
+                  - director1
+                  producer:
+                  - producer1
+                  writer:
+                  - writer1
+                  actor:
+                  - actor1
+                  aggregate_review: '5.0'
+                  cover_image_url: 
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: number
+                  format: double
+                review:
+                  type: string
+                user_id:
+                  type: number
+              required:
+              - rating
+              - review
+  "/users/sign_in":
+    post:
+      summary: user login
+      tags:
+      - Users
+      security: []
+      parameters: []
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - email
+              - password
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000
+components:
+  securitySchemes:
+    authorization:
+      type: http
+      name: Authorization
+      in: header
+      scheme: bearer
+security:
+- authorization: []

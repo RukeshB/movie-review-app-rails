@@ -1,0 +1,15 @@
+image: ruby:3.1.2
+before_script:
+  - apt-get update && apt-get install -y cmake
+  - bundle install
+  - git fetch origin
+
+stages:
+  - lint
+
+pronto:
+  stage: lint
+  only:
+    - merge_requests
+  script:
+    - PRONTO_GITLAB_API_PRIVATE_TOKEN=$PRONTO_ACCESS_TOKEN bundle exec pronto run -f gitlab_mr -c origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME
